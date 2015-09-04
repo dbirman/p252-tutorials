@@ -32,11 +32,3 @@ Goals:
 (3) All students exposed to multiple data sets: introduce them to asking interesting questions and being curious.
 
 (4) Mixture of R syntax and Stats concepts: focus less on perfection and more on general exposure.
-
-Consistency (note from Dan):
-
-I've changed some of the tutorial to be more consistent. There were many places where a reader would be exposed to multiple ways of doing the same thing (e.g. help(function) vs ?function), although options are nice I think they are confusing. Here is a list of consistency items I've maintained throughout the tutorials:
-
- * ? as help
- * datasets are always loaded from the website, never from a local directory
- * until module 3 I avoid all non built-in packages, except ggplot
