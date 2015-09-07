@@ -13,6 +13,11 @@ Expanded in 2012 by Mike Frank, Benoit Monin and Ewart Thomas
 
 Converted to [R Markdown](http://www.rstudio.com/ide/docs/r_markdown) format and further expanded in 2013 by Michael Waskom.
 
+```{r}
+library(ggplot2)
+```
+
+
 ### Welcome!
 
 Welcome to Module 2! If you are in class 1 the second module is designed to get you up to speed on some statistical concepts, and then to let you free on some datasets. If you are in class 2 this first module is a crash course in R!
@@ -43,27 +48,27 @@ A sidenote on data storage: Most of the data we'll be using is in *csv* format, 
 Manipulating Dataframes
 -----------------------
 
-To begin, we'll load in a simple data file that we'll use in 252, and store it as a [dataframe](http://www.r-tutor.com/r-introduction/data-frame) named "d2".
+To begin, we'll load in a simple data file that we'll use in 252, and store it as a [dataframe](http://www.r-tutor.com/r-introduction/data-frame) named "df_survey".
 
 This data file is called `fieldsimul1.csv`. Here, likely voters (*n* = 240) were surveyed, and report their age (`age`), and level of optimism (`optmism`), as well as other variables. **Is age related to optimism?**
 
-```{r load d2}
-d2 = read.csv('http://stanford.edu/class/psych252/data/fieldsimul1.csv')
+```{r load df_survey}
+df_survey = read.csv('http://stanford.edu/class/psych252/data/fieldsimul1.csv')
 ```
 
 Let's explore this data a bit to see what we'll be working with:
 
-```{r explore_d2}
-str(d2)
-head(d2)
-summary(d2)
+```{r explore_df_survey}
+str(df_survey)
+head(df_survey)
+summary(df_survey)
 ```
 
-Here we can see that this **dataframe** is composed of 7 **variables** that each has 200 observations. In this case, each observation represents a different participant, and the 7 variables tell us information about that participant. As an example, let's look at all the information for participant 5 by looking at the 5th row of d2:
+Here we can see that this **dataframe** is composed of 7 **variables** that each has 200 observations. In this case, each observation represents a different participant, and the 7 variables tell us information about that participant. As an example, let's look at all the information for participant 5 by looking at the 5th row of df_survey:
 
-```{r observeRow_d2}
+```{r observeRow_df_survey}
 participant_num = 5
-d2[participant_num,]
+df_survey[participant_num,]
 ```
 
 This shows us that participant 5 is 25 years old, and has an optimism score of 6.
@@ -76,17 +81,17 @@ Now, we might want to treat some variables as qualitative, nominal **factors** r
 
 For instance, the variable "age" is continuous, but "agecat" is not. However, since the **levels** of "agecat" are indicated with numbers, we must tell R to treat "agecat" as a factor:
 
-```{r agecat_asfactor_d2}
-d2$agecat = factor(d2$agecat)
+```{r agecat_asfactor_df_survey}
+df_survey$agecat = factor(df_survey$agecat)
 ```
 
-Now we can look at the structure of the d2 dataframe again, to make sure agecat is now a factor:
+Now we can look at the structure of the df_survey dataframe again, to make sure agecat is now a factor:
 
-```{r agecat_checkfactor_d2}
-str(d2)
+```{r agecat_checkfactor_df_survey}
+str(df_survey)
 ```
 
-We can also plot age as a function of age category. Here we'll tell R to make the plot *with* the d2 dataframe. This saves on typing "d2$" in front of each variable name.
+We can also plot age as a function of age category. Here we'll tell R to make the plot *with* the df_survey dataframe. This saves on typing "df_survey$" in front of each variable name.
 
 
 Basic Plotting
@@ -97,7 +102,7 @@ If you're starting in Module 2 directly we are using a package called `ggplot()`
 Let's take a look at the factor we created, by plotting age category as a function of age.
 
 ```{r plot_agecat, fig.width=7, fig.height=6}
-ggplot(data=d2) +
+ggplot(data=df_survey) +
   geom_boxplot(aes(x=agecat,y=age))
 ```
 
@@ -106,23 +111,23 @@ Creating factors from continuous variables
 
 Suppose the variable "agecat" wasn't given to us, but we still wanted to group participants into categories based on their respective ages. Given the "age" variable, we can create a new categorical variable (i.e., **factor**) by specifying breaks at specific intervals:
 
-```{r agecat0_d2}
-d2$agecat0 = findInterval(d2$age, c(29,39,49,65))
-d2$agecat0 = factor(d2$agecat0)
-head(d2)
+```{r agecat0_df_survey}
+df_survey$agecat0 = findInterval(df_survey$age, c(29,39,49,65))
+df_survey$agecat0 = factor(df_survey$agecat0)
+head(df_survey)
 ```
 
 Specifically, these break points result in 5 age categories, 0:28, 29:38, 39:48, 49:64, and 65 and up. We can also visualize these groups:
 
 ```{r plot_agecat0, fig.width=5, fig.height=4}
-ggplot(data=d2) +
+ggplot(data=df_survey) +
   geom_boxplot(aes(x=agecat0,y=age))
 ```
 
 Let's also take a look at plotting a histogram of the ages. Here we are also setting the color of the bars as well as the title of the plot. The BW theme removes that ugly grey grid in the background which is the default.
 
 ```{r plot_agedist, fig.width=5, fig.height=4}
-ggplot(data=d2) +
+ggplot(data=df_survey) +
   geom_histogram(aes(x=age),fill='orange',color='black',binwidth=4) + 
   ggtitle('Distribution of Age') +
   theme_bw()
@@ -133,7 +138,7 @@ Next, let's view a scatter plot of optimism by age. Before when we plotted the d
 We'll also add in a line to get a sense of the general trend of the data; here, we'll plot a non-parametric best-fitting curve in red using the ["lowess"](http://rss.acs.unt.edu/Rdoc/library/gplots/html/lowess.html) function.
 
 ```{r plot_optmism_on_age, fig.width=5, fig.height=4}
-ggplot(data=d2,aes(x=age,y=optmism)) +
+ggplot(data=df_survey,aes(x=age,y=optmism)) +
   ggtitle('Optimism vs. Age') +
   geom_point() +
   geom_smooth(method="lm",color="red")
@@ -146,8 +151,8 @@ To examine the best-fitting linear relationship between quantitative variables (
 
 For instance, we might want to investigate the relationship between age (X) and optimism (Y), depicted in the plot above. As age increases, how does optimism change?
 
-```{r lm_ageVSoptmism_d2}
-rs2 = lm(optmism ~ age, data = d2) # this is the same as lm(d2$optmism ~ d2$age)
+```{r lm_ageVSoptmism_df_survey}
+rs2 = lm(optmism ~ age, data = df_survey) # this is the same as lm(df_survey$optmism ~ df_survey$age)
 summary(rs2) # given the model we just fit with lm(), give us the summary
 ```
 
@@ -156,7 +161,7 @@ Based off of this output, we can see that age is a significant predictor of opti
 We can also plot the regression line, fit by least squares regression, on top of the scatterplot. Here, we use the function **abline()**, and give it the model we just fit above with lm(). While we're doing this, let's also change the names of the x- and y-axis labels:
 
 ```{r plot_optmism_on_age_reg, fig.width=5, fig.height=4}
-plot(d2$optmism ~ d2$age, main = 'Optimism vs Age', xlab='Age', ylab='Optimism')
+plot(df_survey$optmism ~ df_survey$age, main = 'Optimism vs Age', xlab='Age', ylab='Optimism')
 abline(rs2, col='red')
 ```
 
@@ -231,36 +236,36 @@ To test our $H_0$, we'll compute a "standardized difference", or **t statistic**
 
 Let's start by reading in our data:
 
-```{r load_d0}
-d0 = read.csv("http://stanford.edu/class/psych252/data/P005.txt", sep='\t')
-str(d0)
-head(d0)
+```{r load_df_RTWL}
+df_RTWL = read.csv("http://stanford.edu/class/psych252/data/P005.txt", sep='\t')
+str(df_RTWL)
+head(df_RTWL)
 ```
 
 Now we'll plot the data to see the relationship between RTWL and COL:
 
-```{r plot_col_on_rtwl, fig.width=4, fig.height=3}
+```{r plot_col_v_rtwl, fig.width=4, fig.height=3}
 boxplot(COL ~ RTWL, col='yellow', 
         pch=23, 
         xlab = "RTWL", ylab = "COL",
         main='COL vs RTWL',
-        data=d0)
+        data=df_RTWL)
 ```
 
 ### Short-form data for t.test()
 
-Before we can run a t-test, we have to make some changes to the data. From looking at the data above, we can see that the dataframe d0 is in *long-form*; each variable is in a different column. This format is fine for `boxplot()` and `lm()`, but older functions like `t.test()` need the data in *short-form* with COL for cities with RTWL = 0 in one column, and COL for cities with RTWL = 1 in a 2nd column.
+Before we can run a t-test, we have to make some changes to the data. From looking at the data above, we can see that the dataframe df_RTWL is in *long-form*; each variable is in a different column. This format is fine for `boxplot()` and `lm()`, but older functions like `t.test()` need the data in *short-form* with COL for cities with RTWL = 0 in one column, and COL for cities with RTWL = 1 in a 2nd column.
 
 We'll make 2 variables by selecting **subsets** of the COL data, *conditional* on whether or not the cities have a RTWL. In R, the *brackets* (`[ ]`) let us select rows of a variable conditional on another variable. Here, we'll select the rows of COL where RTWL is equal to 0, or 1:
 
-```{r subsetCOL_d0}
-COL0 = d0$COL[d0$RTWL == 0]
-COL1 = d0$COL[d0$RTWL == 1]
+```{r subsetCOL_df_RTWL}
+COL0 = df_RTWL$COL[df_RTWL$RTWL == 0]
+COL1 = df_RTWL$COL[df_RTWL$RTWL == 1]
 ```
 
 Now that the COL data is grouped into variables based on RTWL status, we can explore these variables quickly:
 
-```{r explore_subsetCOL_d0}
+```{r explore_subsetCOL_df_RTWL}
 str(COL0)
 str(COL1)
 ```
@@ -271,7 +276,7 @@ Here, we see that there are 28 cities with RTWL=0, and 10 cities with RTWL=1.
 
 Now that we have our data in the correct format, we can run a t-test testing the H0 that mean(COL0) = mean(COL1). Right now, we'll just assume that the two variances are equal.
 
-```{r ttest_subsetCOL_d0}
+```{r ttest_subsetCOL_df_RTWL}
 res1 = t.test(COL0, COL1, var.equal = TRUE)
 res1
 ```
@@ -280,13 +285,13 @@ res1
 
 Great! However, we automatically assumed that the variances were equal between the 2 groups of cities. We can use the **standard deviation** function `sd()` to estimate the standard deviation for these 2 groups:
 
-```{r sd_subsetCOL_d0}
-c(sd0 = sd(COL0), sd1 = sd(COL1))
+```{r sd_subsetCOL_df_RTWL}
+c(sdf_RTWL = sd(COL0), sd1 = sd(COL1))
 ```
 
 These numbers are pretty different; however, the two groups had different numbers of cities. We can use the `var.test()` function to directly test the H0 that the variance between two samples is equal.
 
-```{r vartest_subsetCOL_d0}
+```{r vartest_subsetCOL_df_RTWL}
 var.test(COL0, COL1)
 ```
 
@@ -298,15 +303,15 @@ Suppose the COL measurements for RTWL=0 and RTWL=0 had been taken from the *same
 
 As an example, we have a study in which, for each city, COL is measured BEFORE the RTWL is passed, and 2 years AFTER the RTWL is passed:
 
-```{r load_d0s}
-d0s = read.csv('http://stanford.edu/class/psych252/data/rtwl.paired.csv')
-str(d0s)
+```{r load_df_RTWLs}
+df_RTWLs = read.csv('http://stanford.edu/class/psych252/data/rtwl.paired.csv')
+str(df_RTWLs)
 ```
 
 Since the two groups are **paired** (i.e., NOT independent), we must specify that in the `t.test()` by saying "`paired=TRUE`". Otherwise, our results will be incorrect.
 
-```{r ttest_d0s}
-res2a = t.test(d0s$col0, d0s$col1, 
+```{r ttest_df_RTWLs}
+res2a = t.test(df_RTWLs$col0, df_RTWLs$col1, 
                var.equal = TRUE, 
                paired = TRUE)
 res2a
@@ -314,8 +319,8 @@ res2a
 
 If we made a mistake and forgot to specify "`paired=TRUE`", R would default to `paired=FALSE`, and our output would be incorrect:
 
-```{r ttest_incorr_d0s}
-res2b = t.test(d0s$col0, d0s$col1, 
+```{r ttest_incorr_df_RTWLs}
+res2b = t.test(df_RTWLs$col0, df_RTWLs$col1, 
                var.equal = TRUE)
 res2b
 ```
