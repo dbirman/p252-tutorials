@@ -205,7 +205,7 @@ rtwl
 
 Now, we'll combine these variables to make a dataframe; there will be 2 variables, *(1)* the cost of living for the 14 cities before & after the RTWL was passed, and *(2)* the status of the RTWL:
 
-```{r create_d0l}
+```{r create_rtw.tablel}
 rtwl_plong = data.frame(cbind(col = col, rtwl = rtwl))
 rtwl_plong = rtwl_plong %>%
   rename(CostOfLiving=col) %>%
@@ -224,11 +224,13 @@ ggplot(data=rtwl_plong, aes(x=rtwl,y=CostOfLiving,fill=rtwl)) +
 Additive & Interactive Models
 -----------------------------------
 
-Returning to the initial data, d0, we saw that COL depends on RTWL. Does it also depend on Income? To get a general idea, we can look at the data by plotting income and COL, as well as the linear line of best fit in red:
+Returning to the initial data, rtw.table, we saw that COL depends on RTWL. Does it also depend on Income? To get a general idea, we can look at the data by plotting income and COL, as well as the linear line of best fit in red:
 
 ```{r plot_col_on_income, fig.width=4, fig.height=3}
-plot(COL~Income, data=d0)
-abline(lm(COL~Income, data=d0), col='red')
+ggplot(data=rtw.table, aes(Income,COL)) +
+  geom_point(size=3) +
+  geom_smooth(method="lm", se=F,color = 'red') +
+  theme_bw()
 ```
 
 Now, we might be interested in the how the effect of RTWL on COL is related to Income level. In an **additive model** (e.g., `COL ~ RTWL + Income`), the effect of RTWL on COL is assumed to be the same at all levels of Income. Here, if income level were tightly correlated with whether or not cities have a RTWL, the unique variance explained by RTWL and Income level might be small. 
@@ -239,80 +241,74 @@ In contrast, in an **interactive model** (e.g., `COL ~ RTWL * Income`) the effec
 
 For simplicity, we might want to look at income as a categorical **factor**, not a quantitative variable. So let us replace Income by a new factor, "Incomecat" which can be 'low' or 'high'. We'll use an income of 4000 as the dividing point; those cities with incomes less than 4000 will fall into the "low" income category, and those with incomes at 4000 or above will fall into the "high" income category:
 
-```{r incomecat_d0}
-d0$Incomecat = findInterval(d0$Income, 4000)
-d0$Incomecat = factor(d0$Incomecat, labels = c("low", "high"))
+```{r incomecat_rtw.table}
+rtw.table <- rtw.table %>%
+  mutate(IncomeCat=findInterval(rtw.table$Income,4000)) %>%
+  mutate(IncomeCat=factor(IncomeCat,labels=c("low","high")),RTWL=factor(RTWL,labels=c("No","Yes")))
 ```
 
 Now we'll print a *cross-tabulation* of RTWL and Incomecat to get an idea of how many cities fall into each group:
 
-```{r crosstab_d0}
-table(d0$Incomecat, d0$RTWL)
+```{r crosstab_rtw.table}
+table(rtw.table$IncomeCat, rtw.table$RTWL)
 ```
 
-Note that there are only 2 cities with RTWL = 1 and Incomecat = high....so the following results are suspect. We'll continue though, just to demonstrate how to conduct these models.
+Note that there are only 2 cities with RTWL = 1 and IncomeCat = high....so the following results are suspect. We'll continue though, just to demonstrate how to conduct these models.
 
 ### Additive model
 
-```{r lm_add_d0}
-res3 = lm(COL ~ RTWL + Incomecat, data = d0)
-summary(res3)
+```{r lm_add_rtw.table}
+rs_add = lm(COL ~ RTWL + IncomeCat, data = rtw.table)
+summary(rs_add)
 ```
 
 ### Interactive model
 
-```{r lm_inter_d0}
-res4 = lm(COL ~ RTWL * Incomecat, data = d0)
-summary(res4)
+```{r lm_inter_rtw.table}
+rs_int = lm(COL ~ RTWL * IncomeCat, data = rtw.table)
+summary(rs_int)
 ```
 
 Here we can see that the interaction is significant. To get a better idea for the data, we can use the `interaction.plot()` function to plot COL by RTWL and Income category:
 
 ```{r plot_rtwl_income_col_interaction, fig.width=4, fig.height=3}
-with(d0, interaction.plot(RTWL, Incomecat, COL, 
-                          fun = mean, 
-                          xlab='RTWL', 
-                          ylab='COL', 
-                          lwd = 2))
+ggplot(data=rtw.table, aes(x=RTWL,y=COL,color=IncomeCat,group=IncomeCat)) +
+  scale_color_brewer(palette="Paired") +
+  geom_smooth(method="lm",se=F,size=3) +
+  theme_bw()
 ```
 
+Some notes: we have to tell ggplot that each group consists of only one mean observation by forcing group=IncomeCat, otherwise ggplot() complains that each group consists of a single observation. Also note the use of the color brewer scale to adjust the line colors, see here for a list of color palettes: http://www.lgbmi.com/wordpress/wp-content/uploads/2012/08/colorbrewer_names.png. Try replacing the color=IncomeCat with linetype=IncomeCat and see what happens.
+
 By looking at this plot, we can see that when the income is high, the effect of RTWL on COL is small. However, when income is low, cost of living is lower if there is a right to work law.
-
-
-### Advanced ggplot
-
-Let's start by plotting the interaction model that we created above, we can use a few packages to do this.
-
 
 ### Exercise data
 
 Now, we'll load in the data file `exer.csv`. Here, participants (*n* = 30) were randomly assigned to two different diets: low-fat (`diet` = 1) and not low-fat (`diet` = 2), and three different types of exercise: at rest (`exertype` = 1), walking leisurely (`exertype` = 2), and running (`exertype` = 3).  Their pulse rate (`pulse`) was measured at three different time points during their assigned exercise: at 1 minute (`time` = 1), 15 minutes (`time` = 2), and 30 minutes (`time` = 3).  This is a *repeated measures* design, with `time` as the *within-subject* (repeated) variable.  **How does pulse depend on time, diet and exertype?**
 
 
-```{r load_d2}
-d2 <- read.csv('http://stanford.edu/class/psych252/data/exer.csv')
-str(d2)
-summary(d2)
+```{r load_exer}
+exer <- read.csv('http://stanford.edu/class/psych252/data/exer.csv')
+str(exer)
+summary(exer)
 ```
 
 We can see that all the variables are integers since the raw data entries began with numbers, even though some should be factors. We want to convert `id`, `diet`, and `exertype` to factors with informative levels:
 
-```{r setfactors_d2}
-d2$diet <- factor(d2$diet, labels=c('lo.fat','non.lo.fat'))
-d2$id <- factor(d2$id)
-d2$exertype <- factor(d2$exertype, labels=c('rest','walk','run'))
+```{r setfactors_exer}
+exer = exer %>%
+  mutate(diet=factor(diet,labels=c("lo.fat","non.lo.fat")),id=factor(id),exertype=factor(exertype,labels=c("rest","walk","run")))
 
-summary(d2) # double check formatting
+summary(exer) # double check formatting
 ```
 
 ### Plot exercise data
-Now, we'll use `ggplot2`'s `qplot()` function to plot the subjects' pulse over time points 1-3 for each of the 6 groups (diet type X exercise type):
 
 ```{r qplot_tim_on_pulse_facets, fig.width=7, fig.height=5}
-qp3 = qplot(time, pulse, facets = diet ~ exertype, colour = id,
-            geom = "line", data=d2) + 
-      theme_bw() + plot.style
-print(qp3)
+ggplot(data=exer, aes(x=time, y=pulse, color=id)) +
+  geom_line() +
+  facet_grid(diet ~ exertype) +
+  theme_bw()
 ```
 
 ### Bar graphs
@@ -321,28 +317,18 @@ We might also want to visualize this data in bar graph form. To do this with ggp
 
 First, we'll extract the mean pulses across subjects for each of the 6 groups at all three time points:
 
-```{r means_d2}
-ms <- aggregate(pulse ~ time + diet + exertype, d2, mean)
-ms
+```{r means_exer}
+ms = exer %>%
+  group_by(time,diet,exertype) %>%
+  summarise(ci95=sd(pulse)/sqrt(n())*1.96,pulse=mean(pulse))
 ```
 
-Now, we'll get the standard error of the mean. We'll do this using the function `se.mean()` defined in the script 'mc.plots1.r'. The function is elaborated below:
-
-```{r sterr_d2}
-ms$err = aggregate(pulse ~ time + diet + exertype, d2, 
-                    FUN = se.mean)$pulse
-
-# This is the same as the function se.mean()
-ms$err = aggregate(pulse ~ time + diet + exertype, d2, 
-                   function(x) {sd(x) / sqrt(length(x))})$pulse
-
-ms
-```
+Caution: if you don't take sd first in summarise it will already have re-assigned pulse to be the mean values, and the script won't work (try it out if you understand the problem here...).
 
 Finally, we plot the bar graph:
 ```{r qlot_time_on_pulse_facet_bars, fig.width=7, fig.height=5}
-qp4 <- qplot(time, pulse, facets = . ~ diet, ymin=pulse - err, ymax=pulse + err, 
-  geom=c("pointrange","line"), colour=exertype, data=ms) + 
-  theme_bw() + plot.style
-print(qp4)
+ggplot(data=ms) +
+  geom_boxplot(aes(time,pulse,ymin=pulse-ci95,ymax=pulse+ci95,color=exertype)) +
+  facet_grid(.~diet) +
+  theme_bw()
 ```
