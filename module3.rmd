@@ -101,21 +101,42 @@ ggplot(data_long,aes(x=nsols,y=solved,color=cond.id)) +
 Regression: simple and multiple
 -------------------------------
 
-Now let's re-attach the rtw.table dataframe and examine the relationship between unemployment rate ('Urate') and cost of living ('COL') using the lm() function. This is an example of what we are calling a "simple" regression, as there is only a single *independent* or *predictor* variable (which is what appears on the right side of the `~` in the function).
+Now let's attach the rtw.table dataframe and examine the relationship between unemployment rate ('Urate') and cost of living ('COL') using the lm() function. This is an example of what we are calling a "simple" regression, as there is only a single *independent* or *predictor* variable (which is what appears on the right side of the `~` in the function).
+
+```{r rtw_load}
+rtw.table <- read.csv("http://stanford.edu/class/psych252/data/P005.txt", sep='\t')
+rtw.table <- rtw.table %>%
+  rename(CostOfLiving=COL,UnemploymentRate=URate)
+str(rtw.table)
+```
 
 ```{r rtw_lm}
-attach(rtw.table)
-
-rs3 = lm(COL ~ URate)
-summary(rs3)
+rs = rtw.table %>%
+  lm(CostOfLiving ~ UnemploymentRate, data=.)
+summary(rs)
 ```
 
 Here, the output suggests that there is not a significant relationship between unemployment rate and cost of living. We can see this by looking under the "Coefficients", for URate t=1.67, p = 0.103. In the text at the bottom, F(1,36)=2.803, p=0.1028.
 
-We can also plot the residuals to get a better idea of possible outliers, etc.
-```{r plot_col_on_urate_lm, fig.width=7, fig.height=6}
-plot(rs3)
+We can also plot the data to see this visually.
+
+```{r}
+ggplot(data=rtw.table,aes(x=UnemploymentRate,y=CostOfLiving)) +
+  geom_point() +
+  geom_smooth(method="lm",color="orange",se=F) +
+  theme_bw()
 ```
+
+And we can plot the residuals to get a better idea of possible outliers, etc.
+
+```{r plot_col_on_urate_lm, fig.width=7, fig.height=6}
+ggplot(data=rtw.table,aes(x=UnemploymentRate,y=rs$residuals)) +
+  geom_point() +
+  geom_smooth(method="lm", se=F) +
+  theme_bw()
+```
+
+Note that the fitted regression line runs through zero, exactly as expected for a plot of the residuals.
 
 ### Removing outliers
 
@@ -140,33 +161,44 @@ Sometimes we want to know how **multiple** variables influence our DV. Using `lm
 Now, one might ask if the right to work law affects cost of living, when controlling for other variables, such as income. This is an example of multivariate analysis. To examine this question, we can enter multiple predictors into the `lm()` function:
 
 ```{r rtw_multiple_regressino}
-rs4 = lm(COL ~ RTWL + URate + Income + PD)
-summary(rs4)
+rs_m = rtw.table %>%
+  lm(CostOfLiving ~ RTWL + UnemploymentRate + Income + PD, data=.)
+summary(rs_m)
 ```
 
 Here we can see that the right to work law affects cost of living when controlling for the other factors. The presence of a right to work low corresponds with a lower cost of living. Further, when controlling for Income, PD, and the right to work law, unemployment rate also explains a signficant amount of unique variance in cost of living; more specifically, as unemployment rate increases, cost of living decreases.
 
-Remember to detach the dataframe when you're done working!
+We can also plot the different effects by using a nice package, "effects", combined with the standard plot function.
 
-
-```{r load_d0s}
-d0s = read.csv('http://stanford.edu/class/psych252/data/rtwl.paired.csv')
-str(d0s)
+```{r}
+#install.packages('effects')
+library(effects)
+plot(allEffects(rs_m))
 ```
 
+Try designing a ggplot() that shows you the *interaction* effect of Income and UnemploymentRate on Cost of Living. A hint: in the same way that you set the x and y aesthetic you can set variables to define the size, color, or fill (among other things) of the dots or lines on your plot, try playing with these!
+
+```{r}
+# your code here!
+```
 
 ### Generate boxplots from short-form data
 
-Now let's take a quick peek at this data. Since d0s is in short-form, we need to make some changes before boxplot can generate a plot for us. We'll start by making a variable by combining the data in the variable d0s$col0 with the data in d0s$col1:
+```{r load_rtwl_paired}
+rtwl_paired = read.csv('http://stanford.edu/class/psych252/data/rtwl.paired.csv')
+str(rtwl_paired)
+```
 
-```{r combine_cols_d0s}
-col = c(d0s$col0, d0s$col1)
+Now let's take a quick peek at this data. Since rtwl_paired is in short-form, we need to make some changes before boxplot can generate a plot for us. We'll start by making a variable by combining the data in the variable rtwl_paired$col0 with the data in rtwl_paired$col1:
+
+```{r combine_cols_rtwl_paired}
+col = c(rtwl_paired$col0, rtwl_paired$col1)
 col
 ```
 
 Then, we'll use the `rep()` (short for "repeat") function to make a long vector of 0s and 1s signifying RTWL status. Each vector should be 14 numbers long, since there were 14 cities total:
 
-```{r rep_rtwl_d0s}
+```{r rep_rtwl_rtwl_paired}
 rtwl = rep(c(0, 1), each = 14)
 rtwl
 ```
@@ -174,21 +206,20 @@ rtwl
 Now, we'll combine these variables to make a dataframe; there will be 2 variables, *(1)* the cost of living for the 14 cities before & after the RTWL was passed, and *(2)* the status of the RTWL:
 
 ```{r create_d0l}
-d0l = data.frame(cbind(col = col, rtwl = rtwl))
-d0l
+rtwl_plong = data.frame(cbind(col = col, rtwl = rtwl))
+rtwl_plong = rtwl_plong %>%
+  rename(CostOfLiving=col) %>%
+  mutate(rtwl=factor(rtwl,levels=c(0,1),labels=c("No","Yes")))
 ```
 
 Finally,  we can create a boxplot:
 
 ```{r plot_col_on_rtwl_paired, fig.width=4, fig.height=3}
-boxplot(col ~ rtwl, col='lightgreen', 
-        pch=23, 
-        xlab = "RTWL", ylab = "COL",
-        main='COL vs RTWL, paired data',
-        data=d0l)
+ggplot(data=rtwl_plong, aes(x=rtwl,y=CostOfLiving,fill=rtwl)) +
+  geom_boxplot() +
+  ggtitle('Cost of Liivng vs. Right to Work Laws: Paired data') +
+  xlab('')
 ```
-
-
 
 Additive & Interactive Models
 -----------------------------------
