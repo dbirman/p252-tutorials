@@ -9,28 +9,26 @@ output:
 
 Thank you to Paul Thibodeau (2009), 252 instructors in 2010 and 2011, Mike Frank, Benoit Monin, and Ewart Thomas for the original tutorials. Michael Waskom for the conversion to [R Markdown](http://www.rstudio.com/ide/docs/r_markdown). The most recent iteration was created in 2015 by Dan Birman, Natalia Velez, and Kara Weisman.
 
-
-
 *If you haven't already installed R, it is available [here](http://www.r-project.org/).*
 
 Introduction to the tutorials
 -----------------------------
 
-The data analysis environment we'll be using for Psych 252 consists of R and RStudio. **R** is a programming language that is specifically designed for statistical computation. It is powerful, flexible, and widely used in the statistical community. The aspects that make R so powerful and flexible, however, contribute to a learning curve that is likely steeper than what you might find in "point-and-click" programs (like SPSS) - using **RStudio** (an "integrated development environment" specifically designed for R) makes things a little easier, but learning these new tools can still feel overwhelming at times. This tutorial provides a general introduction to R, and a preview of how R is used in the course. We hope the tutorial will reduce the feelings of frustration and helplessness that can emerge early in our attempt to learn R and statistics at the same time - and provide a resource for you to return to periodically throughout the quarter (and beyond!).
+The data analysis environment we'll be using for Psych 252 consists of R and RStudio. **R** is a programming language that is specifically designed for statistical computation. It is powerful, flexible, and widely used in the statistical community. The aspects that make R so powerful and flexible, however, contribute to a learning curve that is likely steeper than what you might find in "point-and-click" programs (like SPSS). Using **RStudio** (an "integrated development environment" specifically designed for R) makes things a little easier, but learning these new tools can still feel overwhelming at times. This tutorial provides a general introduction to R, and a preview of how R is used in the course. We hope the tutorial will reduce the feelings of frustration and helplessness that can emerge early in our attempt to learn R and statistics at the same time - and provide a resource for you to return to periodically throughout the quarter (and beyond!).
 
 Some notes on R and RStudio
 ---------------------------
 
 ### Common questions: What am I doing? Why?
 
-Your basic goal when you're working with data in R is to write out a **script** that documents and executes every step of your interaction with your data, via lines of **code**. You can then run this code in the **console**, either bit by bit or all at once. Your script will ultimately include every step of data processing and analysis:
+Your basic goal when you're working with data in R is to write out a **script** that documents and executes every step of your interaction with your data, via lines of **code**. You can then run this code in the **console**, either bit by bit (starting from the top, and working your way down) or all at once. Your script will ultimately include every step of data processing and analysis:
 
 * __Formatting datasets__ (e.g., making new variables based on other variables in your dataset, isolating subsets of your dataset, comparing different datasets, ...)
 * __Summarising results__ (e.g., finding means, assessing variability and distributions, ...)
 * __Running statistical analyses__ (e.g., t-tests, chi-squared tests, regressions, ...)
 * __Making plots__ 
 
-Your script should also include some notes about what you're doing, for future reference. One of the best ways to do this is by creating an R Markdown document, like this one, where you can include both prose (like this current pragraph) and code (more on that later!). 
+Your script should also include some notes about what you're doing, for future reference. One of the best ways to do this is by creating an R Markdown document, like this one, where you can include both prose (like this current paragraph) and code (more on that later!). 
 
 This has so many advantages over other ways of analyzing data!
 
@@ -44,12 +42,12 @@ And if you get really into it, you can use version control on your analysis code
 
 In RStudio, the default view shows you 4 windows:
 
-* By default, the upper left window in RStudio shows you tabs for all of the __R scripts__ (extension: .R) or __R Markdown files__ (extension: .rmd) that you currently have open. These are the places where you're storing your step-by-step guide for how to processes, analyze, plot, etc. your dataset. 
-* The __console__ is (by default) in the lower left window of RStudio . This is where you can type in lines of code, run them, and see results printed out. It's like the screen of a calculator. 
-* In the upper right window of RStudio (by default), you can see your __environment__, which is where you'll see any datasets you've loaded, as well as any other variables or objects you've created (e.g., by assigning some variable to store the results of a statistical test). If you want to examine what these datasets (etc.) look like, you can click on them and they'll pop up in the upper left window! (You can also do this by using the 'View()' function in the console.) This window also has a tab for viewing your __history__, i.e., all the commands you've run in the console, in order.
+* By default, the upper left window in RStudio shows you tabs for all of the __R scripts__ (extension: .R) or __R Markdown files__ (extension: .rmd) that you currently have open. These are the places where you're storing your step-by-step guide for how to processes, analyze, plot, etc. your dataset. You can run lines of code from your script by highlighting them, and pressing COMMAND + ENTER on Mac, or CONTROL + ENTER on PC. If you're in an R Markdown document and want to run a whole chunk of code, you can press ALT + COMMAND + C on Mac, or ALT + CONTROL + C on PC.
+* The __console__ is (by default) in the lower left window of RStudio . This is where you can type in lines of code, run them, and see results printed out. It's like the screen of a calculator. When you run code from your script, it will show up here, along with its results and any warning or error messages.
+* In the upper right window of RStudio (by default), you can see your __environment__, which is where you'll see any datasets you've loaded as well as any other variables or objects you've created in the console. If you want to examine what these datasets (etc.) look like, you can click on them and they'll pop up in the upper left window! (You can also do this by using the `View()` function in the console.) This window also has a tab for viewing your __history__, i.e., all the commands you've run in the console, in order.
 * In the lower right window of RStudio (by default) are tabs for viewing your __files__ (showing you the same organization of files and folders that you'd see in Finder), your __plots__ that you create, any __packages__ you have loaded or want to load (more on this later), and the __help documentation__ for any functions you want to learn more about (more on this later, too!).
 
-(Note that you can change the layout of these windows if you want!)
+(Note that you can change the layout of these windows if you want.)
 
 Getting down to business: Basic interaction with the R console
 --------------------------------------------------------------
