@@ -7,13 +7,9 @@ output:
     toc: yes
 ---
 
-Based on notes by Paul Thibodeau (2009) and revisions by the Psych 252 instructors in 2010, 2011, and 2015
+Thank you to Paul Thibodeau (2009), 252 instructors in 2010 and 2011, Mike Frank, Benoit Monin, and Ewart Thomas for the original tutorials. Michael Waskom for the conversion to [R Markdown](http://www.rstudio.com/ide/docs/r_markdown). The most recent iteration was created in 2015 by Dan Birman, Natalia Velez, and Kara Weisman.
 
-Expanded in 2012 by Mike Frank, Benoit Monin and Ewart Thomas
 
-Converted to [R Markdown](http://www.rstudio.com/ide/docs/r_markdown) format and further expanded in 2013 by Michael Waskom.
-
-Revised and further expanded in 2015 by Dan Birman, Natalia Vélez, and Kara Weisman.
 
 *If you haven't already installed R, it is available [here](http://www.r-project.org/).*
 
@@ -43,14 +39,6 @@ This has so many advantages over other ways of analyzing data!
 * You can easily give your script to other people as a guide for them to understand or help you with your analyses, build on your findings, reanalyze your data, attempt to replicate your studies, etc.
 
 And if you get really into it, you can use version control on your analysis code (e.g., using [github](https://github.com/)), make your own functions and packages tailored to your own projects and needs, make web apps for visualizing your data, and even write entire manuscripts in the R/RStudio environment. Learning R in the context of this course can be a springboard for all of these skills and projects.
-
-### If you learn nothing else today, learn this: Search!
-
-We'll keep reminding you of this throughout today's session, and your TAs will remind of you this throughout the course, but you heard it here first: Search quickly, search often, and search in plain English (or your preferred non-computer language)! Don't know what function you should use to do a t-test? Google "t test R", or "how do I do a t-test in R?". Don't remember how to use the chisq.test() function? Google "chisq.test() R". Don't remember what a chi-squared test is? Google it, and read the Wikipedia page, and the Stackexchange discussion, and whatever weird PDFs you find online. Still getting an error message when you try to run the code? Google that error message, in quotes.
-
-Every person using R, and every person doing statistics, has a million questions as they are doing it - novices and experts alike. Luckily for all of us, many of our fellow R and stats learners post their questions online, and other lovely people attempt to answer them publicly! We read somewhere that a prominent distinction between an experienced programmer and a novice is the longer latency for the novice to look up the help for something confusing (but the direction of causality is not clear!).
-
-Another wonderful thing about working in R is that there's actually a lot of help built right into R, and RStudio makes it very easy to see. Almost all R functions (more later on what those are) have help files built in that will provide you with useful information about what those functions do and how to use them. You find this by typing '?function', where I am using "function" as a stand-in for the name you actually want to know about (e.g., '?chisq.test' or '?t.test'). It's important to read these files closely the first time you encounter a function, but it's also (possibly more) important to refer to them **frequently**. If you have a sense for what you want to do, but don't know or can't remember the exact function that will do it, you can use two question marks to search through the help files for a term (e.g. '??regression').
 
 ### Common questions, continued: Okay but where am I? Where is my dataset?
 
