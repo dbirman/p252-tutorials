@@ -13,24 +13,58 @@ Expanded in 2012 by Mike Frank, Benoit Monin and Ewart Thomas
 
 Converted to [R Markdown](http://www.rstudio.com/ide/docs/r_markdown) format and further expanded in 2013 by Michael Waskom.
 
+Revised and further expanded in 2015 by Dan Birman, Natalia Vélez, and Kara Weisman.
 
 *If you haven't already installed R, it is available [here](http://www.r-project.org/).*
 
-Brief Notes about R
-----------------------------
+Introduction to the tutorials
+-----------------------------
 
-The data analysis environment we'll be using for Psych 252 is R. R is a programming language that is specifically designed for statistical computation. It has many appealing features: it is powerful, flexible, and widely used in the statistical community. The aspects that make R so powerful and flexible, however, contribute to a learning curve that is likely steeper than what you might find in point-and-click packages. This tutorial provides a general introduction to R, and a preview of how R is used in the course. We hope the tutorial will reduce the feelings of frustration and helplessness that can emerge early in our attempt to learn R and statistics at the same time. Although this tutorial doesn't assume any preexisting knowledge, if you've had no experience with computer programming there may be some parts of it that are confusing or lack a particularly deep meaning. Try your best to understand them now, but you will also likely benefit from returning to the tutorial periodically as you become more comfortable.
+The data analysis environment we'll be using for Psych 252 consists of R and RStudio. **R** is a programming language that is specifically designed for statistical computation. It is powerful, flexible, and widely used in the statistical community. The aspects that make R so powerful and flexible, however, contribute to a learning curve that is likely steeper than what you might find in "point-and-click" programs (like SPSS) - using **RStudio** (an "integrated development environment" specifically designed for R) makes things a little easier, but learning these new tools can still feel overwhelming at times. This tutorial provides a general introduction to R, and a preview of how R is used in the course. We hope the tutorial will reduce the feelings of frustration and helplessness that can emerge early in our attempt to learn R and statistics at the same time - and provide a resource for you to return to periodically throughout the quarter (and beyond!).
 
-The most important skill to cultivate up front is the ability to help yourself when you are stuck. Fortunately, R is pretty helpful in this regard. R is what's known as an *interpreted language*, which basically means that there is a console you type commands into and get immediate feedback on them. Do this liberally as you work though the tutorial and the early class exercises, making small modifications to the examples we provide until you feel like you really understand what's going on.
+Some notes on R and RStudio
+---------------------------
 
-The console is also your gateway to the built-in help functionality. Almost all R functions (more later on what those are) have help files built in that will provide you with useful information about what those functions do and how to use them. You find this by typing `?function`, where I am using "function" as a stand-in for the name you actually want to know about. It's important to read these files closely the first time you encounter a function, but it's *also* (possibly more) important to refer to them frequently. I read once that a prominent distinction between an experienced programmer and a novice is the longer latency for the novice to look up the help for something confusing (but the direction of causality is not clear!). If you have a sense for what you want to do, but don't know or can't remember the exact function that will do it, you can use two question marks to search through the help files for a term (e.g. `??regression`).
+### Common questions: What am I doing? Why?
 
-Of course, the internet is also a useful resource. Because of its name, it can be a little annoying to google for help with R. The [rseek](http://rseek.org/) website is intended to remedy this problem by acting as an R-specific search engine. A somewhat more useful resource, in my opinion, is the [stackoverflow](http://stackoverflow.com/) website. Because this is a general-purpose resource for programming help, it will be useful to use the R tag (`[R]`) in your queries. A related resource is the [statistics stackexchange](http://stats.stackexchange.com/), which is like Stack Overflow but focused more on the underlying statistical issues.
+Your basic goal when you're working with data in R is to write out a **script** that documents and executes every step of your interaction with your data, via lines of **code**. You can then run this code in the **console**, either bit by bit or all at once. Your script will ultimately include every step of data processing and analysis:
 
-Finally, a note on errors. Novice and expert programmers alike will frequently run into errors in their R code. When this happens, processing will halt and an error message will be printed to the console. This is usually more frustrating for novices, as the error often occurs deep within some function and the message bears no direct correspondence to what they were trying to do. A common beginner mistake is to conclude that the error message is gibberish and resign oneself to woe and dismay. It's important to resist this urge; even if the error message is not immediately informative, it is intended to precisely convey some piece of information, and usually understanding what this information is will be the key to solving the problem.
+* __Formatting datasets__ (e.g., making new variables based on other variables in your dataset, isolating subsets of your dataset, comparing different datasets, ...)
+* __Summarising results__ (e.g., finding means, assessing variability and distributions, ...)
+* __Running statistical analyses__ (e.g., t-tests, chi-squared tests, regressions, ...)
+* __Making plots__ 
 
-Basic interaction with the R console
-------------------------------------
+Your script should also include some notes about what you're doing, for future reference. One of the best ways to do this is by creating an R Markdown document, like this one, where you can include both prose (like this current pragraph) and code (more on that later!). 
+
+This has so many advantages over other ways of analyzing data!
+
+* You have a record for yourself - forever! - for working on analyses over time (even as you continue to collect data), quickly analyzing similar new datasets, and reconstructing abandoned projects
+* You can automate as much of the data processing, analysis, plotting, and even reporting process as you want to, saving you from copying and pasting and making stupid mistakes 
+* You can easily give your script to other people as a guide for them to understand or help you with your analyses, build on your findings, reanalyze your data, attempt to replicate your studies, etc.
+
+And if you get really into it, you can use version control on your analysis code (e.g., using [github](https://github.com/)), make your own functions and packages tailored to your own projects and needs, make web apps for visualizing your data, and even write entire manuscripts in the R/RStudio environment. Learning R in the context of this course can be a springboard for all of these skills and projects.
+
+### If you learn nothing else today, learn this: Search!
+
+We'll keep reminding you of this throughout today's session, and your TAs will remind of you this throughout the course, but you heard it here first: Search quickly, search often, and search in plain English (or your preferred non-computer language)! Don't know what function you should use to do a t-test? Google "t test R", or "how do I do a t-test in R?". Don't remember how to use the chisq.test() function? Google "chisq.test() R". Don't remember what a chi-squared test is? Google it, and read the Wikipedia page, and the Stackexchange discussion, and whatever weird PDFs you find online. Still getting an error message when you try to run the code? Google that error message, in quotes.
+
+Every person using R, and every person doing statistics, has a million questions as they are doing it - novices and experts alike. Luckily for all of us, many of our fellow R and stats learners post their questions online, and other lovely people attempt to answer them publicly! We read somewhere that a prominent distinction between an experienced programmer and a novice is the longer latency for the novice to look up the help for something confusing (but the direction of causality is not clear!).
+
+Another wonderful thing about working in R is that there's actually a lot of help built right into R, and RStudio makes it very easy to see. Almost all R functions (more later on what those are) have help files built in that will provide you with useful information about what those functions do and how to use them. You find this by typing '?function', where I am using "function" as a stand-in for the name you actually want to know about (e.g., '?chisq.test' or '?t.test'). It's important to read these files closely the first time you encounter a function, but it's also (possibly more) important to refer to them **frequently**. If you have a sense for what you want to do, but don't know or can't remember the exact function that will do it, you can use two question marks to search through the help files for a term (e.g. '??regression').
+
+### Common questions, continued: Okay but where am I? Where is my dataset?
+
+In RStudio, the default view shows you 4 windows:
+
+* By default, the upper left window in RStudio shows you tabs for all of the __R scripts__ (extension: .R) or __R Markdown files__ (extension: .rmd) that you currently have open. These are the places where you're storing your step-by-step guide for how to processes, analyze, plot, etc. your dataset. 
+* The __console__ is (by default) in the lower left window of RStudio . This is where you can type in lines of code, run them, and see results printed out. It's like the screen of a calculator. 
+* In the upper right window of RStudio (by default), you can see your __environment__, which is where you'll see any datasets you've loaded, as well as any other variables or objects you've created (e.g., by assigning some variable to store the results of a statistical test). If you want to examine what these datasets (etc.) look like, you can click on them and they'll pop up in the upper left window! (You can also do this by using the 'View()' function in the console.) This window also has a tab for viewing your __history__, i.e., all the commands you've run in the console, in order.
+* In the lower right window of RStudio (by default) are tabs for viewing your __files__ (showing you the same organization of files and folders that you'd see in Finder), your __plots__ that you create, any __packages__ you have loaded or want to load (more on this later), and the __help documentation__ for any functions you want to learn more about (more on this later, too!).
+
+(Note that you can change the layout of these windows if you want!)
+
+Getting down to business: Basic interaction with the R console
+--------------------------------------------------------------
 
 At its least useful, you can treat R like a calculator for basic computations. Just type some mathematical expression into the console, and the result will be displayed on the following line.
 
@@ -280,7 +314,7 @@ We're now going to practice, very briefly, plotting in R. There are many package
 If this is your first time using R you'll probably need to run the install code first. Otherwise skip this step.
 
 ```{r}
-install.packages('ggplot2')
+# install.packages('ggplot2')
 ```
 
 Let's first load the `ggplot()` package so that we can use it:
