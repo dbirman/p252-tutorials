@@ -7,11 +7,7 @@ output:
     toc: yes
 ---
 
-Based on notes by Paul Thibodeau (2009) and revisions by the Psych 252 instructors in 2010, 2011, and 2015
-
-Expanded in 2012 by Mike Frank, Benoit Monin and Ewart Thomas
-
-Converted to [R Markdown](http://www.rstudio.com/ide/docs/r_markdown) format and further expanded in 2013 by Michael Waskom.
+Thank you to Paul Thibodeau (2009), 252 instructors in 2010 and 2011, Mike Frank, Benoit Monin, and Ewart Thomas for the original tutorials. Michael Waskom for the conversion to [R Markdown](http://www.rstudio.com/ide/docs/r_markdown). The most recent iteration was created in 2015 by Dan Birman, Natalia Velez, and Kara Weisman.
 
 ### Advanced R syntax
 
@@ -143,13 +139,19 @@ Note that the fitted regression line runs through zero, exactly as expected for 
 These last diagnostic plots suggest that observations 6 and 34 are outliers. What would the plot look like if these outliers were removed? To do this, we can give R a *negative vector* by typing `-c(6, 34)`, and then we can tell R to take all the values *minus* the values in the vector from the variable. By saying `URate[-c(6,34)]` we're telling R to take all the rows in Urate with the exception of 6 and 34.
 
 ```{r plot_col_on_rtw_no_outliers, fig.width=7, fig.height=6}
-plot(URate[-c(6,34)], COL[-c(6,34)], pch = 23, bg = 'red', main = 'Cost of living vs. Unemployment rate (no outliers)')
-lines(lowess(URate[-c(6,34)], COL[-c(6,34)]), lty = 2, col='red')
+rtw.table.no = rtw.table[-c(6,34),]
+
+ggplot(data=rtw.table.no,aes(x=UnemploymentRate,y=CostOfLiving)) +
+  geom_point() +
+  geom_smooth(method="lm",color="orange",se=F) +
+  theme_bw() +
+  ggtitle('Cost of Living vs. Unemployment Rate (no outliers)')
 ```
 
 ```{r rtw_lm_no_outliers}
-rs4 = lm(COL[-c(6,34)] ~ URate[-c(6,34)])
-summary(rs4)
+rs_no = rtw.table.no %>%
+  lm(CostOfLiving ~ UnemploymentRate, data=.)
+summary(rs_no)
 ```
 
 Here we can see that there is not much difference in the lowess curve, but when those outliers were removed, the effect of unemployment rate on cost of living is marginally significant.
@@ -227,15 +229,15 @@ Additive & Interactive Models
 Returning to the initial data, rtw.table, we saw that COL depends on RTWL. Does it also depend on Income? To get a general idea, we can look at the data by plotting income and COL, as well as the linear line of best fit in red:
 
 ```{r plot_col_on_income, fig.width=4, fig.height=3}
-ggplot(data=rtw.table, aes(Income,COL)) +
+ggplot(data=rtw.table, aes(Income,CostOfLiving)) +
   geom_point(size=3) +
   geom_smooth(method="lm", se=F,color = 'red') +
   theme_bw()
 ```
 
-Now, we might be interested in the how the effect of RTWL on COL is related to Income level. In an **additive model** (e.g., `COL ~ RTWL + Income`), the effect of RTWL on COL is assumed to be the same at all levels of Income. Here, if income level were tightly correlated with whether or not cities have a RTWL, the unique variance explained by RTWL and Income level might be small. 
+Now, we might be interested in the how the effect of RTWL on COL is related to Income level. In an **additive model** (e.g., `CostOfLiving ~ RTWL + Income`), the effect of RTWL on COL is assumed to be the same at all levels of Income. Here, if income level were tightly correlated with whether or not cities have a RTWL, the unique variance explained by RTWL and Income level might be small. 
 
-In contrast, in an **interactive model** (e.g., `COL ~ RTWL * Income`) the effect of RTWL on COL is **NOT** assumed to be the same at all levels of Income. Here, the RTWL could be positively correlated with COL at low incomes, but negatively correlated at high incomes.
+In contrast, in an **interactive model** (e.g., `CostOfLiving ~ RTWL * Income`) the effect of RTWL on COL is **NOT** assumed to be the same at all levels of Income. Here, the RTWL could be positively correlated with COL at low incomes, but negatively correlated at high incomes.
 
 ### Treating income as a categorical variable
 
@@ -258,21 +260,21 @@ Note that there are only 2 cities with RTWL = 1 and IncomeCat = high....so the f
 ### Additive model
 
 ```{r lm_add_rtw.table}
-rs_add = lm(COL ~ RTWL + IncomeCat, data = rtw.table)
+rs_add = lm(CostOfLiving ~ RTWL + IncomeCat, data = rtw.table)
 summary(rs_add)
 ```
 
 ### Interactive model
 
 ```{r lm_inter_rtw.table}
-rs_int = lm(COL ~ RTWL * IncomeCat, data = rtw.table)
+rs_int = lm(CostOfLiving ~ RTWL * IncomeCat, data = rtw.table)
 summary(rs_int)
 ```
 
-Here we can see that the interaction is significant. To get a better idea for the data, we can use the `interaction.plot()` function to plot COL by RTWL and Income category:
+Here we can see that the interaction is significant. To get a better idea for the data, we can plot the interaction itself by grouping the data in ggplot with the interaction variable. In other words we are plotting COL by RTWL split up by Income category:
 
 ```{r plot_rtwl_income_col_interaction, fig.width=4, fig.height=3}
-ggplot(data=rtw.table, aes(x=RTWL,y=COL,color=IncomeCat,group=IncomeCat)) +
+ggplot(data=rtw.table, aes(x=RTWL,y=CostOfLiving,color=IncomeCat,group=IncomeCat)) +
   scale_color_brewer(palette="Paired") +
   geom_smooth(method="lm",se=F,size=3) +
   theme_bw()
@@ -304,6 +306,8 @@ summary(exer) # double check formatting
 
 ### Plot exercise data
 
+Let's try plotting the exercise data. Again, this is an "interaction" that we're looking for, so we have to plot the data by two variables (pulse over time), but also split the data by a third grouping variable, in this case the id variable.
+
 ```{r qplot_tim_on_pulse_facets, fig.width=7, fig.height=5}
 ggplot(data=exer, aes(x=time, y=pulse, color=id)) +
   geom_line() +
@@ -313,7 +317,7 @@ ggplot(data=exer, aes(x=time, y=pulse, color=id)) +
 
 ### Bar graphs
 
-We might also want to visualize this data in bar graph form. To do this with ggplot, we'll use the `aggregate()` function to get means and standard errors from the data.
+We might also want to visualize this data in bar graph form. To do this with ggplot, we'll use the `summarise()` function to get means and confidence intervals from the data.
 
 First, we'll extract the mean pulses across subjects for each of the 6 groups at all three time points:
 

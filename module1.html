@@ -79,7 +79,6 @@ img {
 <li><a href="#introduction-to-the-tutorials">Introduction to the tutorials</a></li>
 <li><a href="#some-notes-on-r-and-rstudio">Some notes on R and RStudio</a><ul>
 <li><a href="#common-questions-what-am-i-doing-why">Common questions: What am I doing? Why?</a></li>
-<li><a href="#if-you-learn-nothing-else-today-learn-this-search">If you learn nothing else today, learn this: Search!</a></li>
 <li><a href="#common-questions-continued-okay-but-where-am-i-where-is-my-dataset">Common questions, continued: Okay but where am I? Where is my dataset?</a></li>
 </ul></li>
 <li><a href="#getting-down-to-business-basic-interaction-with-the-r-console">Getting down to business: Basic interaction with the R console</a><ul>
@@ -97,27 +96,24 @@ img {
 </ul>
 </div>
 
-<p>Based on notes by Paul Thibodeau (2009) and revisions by the Psych 252 instructors in 2010, 2011, and 2015</p>
-<p>Expanded in 2012 by Mike Frank, Benoit Monin and Ewart Thomas</p>
-<p>Converted to <a href="http://www.rstudio.com/ide/docs/r_markdown">R Markdown</a> format and further expanded in 2013 by Michael Waskom.</p>
-<p>Revised and further expanded in 2015 by Dan Birman, Natalia Vélez, and Kara Weisman.</p>
+<p>Thank you to Paul Thibodeau (2009), 252 instructors in 2010 and 2011, Mike Frank, Benoit Monin, and Ewart Thomas for the original tutorials. Michael Waskom for the conversion to <a href="http://www.rstudio.com/ide/docs/r_markdown">R Markdown</a>. The most recent iteration was created in 2015 by Dan Birman, Natalia Velez, and Kara Weisman.</p>
 <p><em>If you haven’t already installed R, it is available <a href="http://www.r-project.org/">here</a>.</em></p>
 <div id="introduction-to-the-tutorials" class="section level2">
 <h2>Introduction to the tutorials</h2>
-<p>The data analysis environment we’ll be using for Psych 252 consists of R and RStudio. <strong>R</strong> is a programming language that is specifically designed for statistical computation. It is powerful, flexible, and widely used in the statistical community. The aspects that make R so powerful and flexible, however, contribute to a learning curve that is likely steeper than what you might find in “point-and-click” programs (like SPSS) - using <strong>RStudio</strong> (an “integrated development environment” specifically designed for R) makes things a little easier, but learning these new tools can still feel overwhelming at times. This tutorial provides a general introduction to R, and a preview of how R is used in the course. We hope the tutorial will reduce the feelings of frustration and helplessness that can emerge early in our attempt to learn R and statistics at the same time - and provide a resource for you to return to periodically throughout the quarter (and beyond!).</p>
+<p>The data analysis environment we’ll be using for Psych 252 consists of R and RStudio. <strong>R</strong> is a programming language that is specifically designed for statistical computation. It is powerful, flexible, and widely used in the statistical community. The aspects that make R so powerful and flexible, however, contribute to a learning curve that is likely steeper than what you might find in “point-and-click” programs (like SPSS). Using <strong>RStudio</strong> (an “integrated development environment” specifically designed for R) makes things a little easier, but learning these new tools can still feel overwhelming at times. This tutorial provides a general introduction to R, and a preview of how R is used in the course. We hope the tutorial will reduce the feelings of frustration and helplessness that can emerge early in our attempt to learn R and statistics at the same time - and provide a resource for you to return to periodically throughout the quarter (and beyond!).</p>
 </div>
 <div id="some-notes-on-r-and-rstudio" class="section level2">
 <h2>Some notes on R and RStudio</h2>
 <div id="common-questions-what-am-i-doing-why" class="section level3">
 <h3>Common questions: What am I doing? Why?</h3>
-<p>Your basic goal when you’re working with data in R is to write out a <strong>script</strong> that documents and executes every step of your interaction with your data, via lines of <strong>code</strong>. You can then run this code in the <strong>console</strong>, either bit by bit or all at once. Your script will ultimately include every step of data processing and analysis:</p>
+<p>Your basic goal when you’re working with data in R is to write out a <strong>script</strong> that documents and executes every step of your interaction with your data, via lines of <strong>code</strong>. You can then run this code in the <strong>console</strong>, either bit by bit (starting from the top, and working your way down) or all at once. Your script will ultimately include every step of data processing and analysis:</p>
 <ul>
 <li><strong>Formatting datasets</strong> (e.g., making new variables based on other variables in your dataset, isolating subsets of your dataset, comparing different datasets, …)</li>
 <li><strong>Summarising results</strong> (e.g., finding means, assessing variability and distributions, …)</li>
 <li><strong>Running statistical analyses</strong> (e.g., t-tests, chi-squared tests, regressions, …)</li>
 <li><strong>Making plots</strong></li>
 </ul>
-<p>Your script should also include some notes about what you’re doing, for future reference. One of the best ways to do this is by creating an R Markdown document, like this one, where you can include both prose (like this current pragraph) and code (more on that later!).</p>
+<p>Your script should also include some notes about what you’re doing, for future reference. One of the best ways to do this is by creating an R Markdown document, like this one, where you can include both prose (like this current paragraph) and code (more on that later!).</p>
 <p>This has so many advantages over other ways of analyzing data!</p>
 <ul>
 <li>You have a record for yourself - forever! - for working on analyses over time (even as you continue to collect data), quickly analyzing similar new datasets, and reconstructing abandoned projects</li>
@@ -126,22 +122,16 @@ img {
 </ul>
 <p>And if you get really into it, you can use version control on your analysis code (e.g., using <a href="https://github.com/">github</a>), make your own functions and packages tailored to your own projects and needs, make web apps for visualizing your data, and even write entire manuscripts in the R/RStudio environment. Learning R in the context of this course can be a springboard for all of these skills and projects.</p>
 </div>
-<div id="if-you-learn-nothing-else-today-learn-this-search" class="section level3">
-<h3>If you learn nothing else today, learn this: Search!</h3>
-<p>We’ll keep reminding you of this throughout today’s session, and your TAs will remind of you this throughout the course, but you heard it here first: Search quickly, search often, and search in plain English (or your preferred non-computer language)! Don’t know what function you should use to do a t-test? Google “t test R”, or “how do I do a t-test in R?”. Don’t remember how to use the chisq.test() function? Google “chisq.test() R”. Don’t remember what a chi-squared test is? Google it, and read the Wikipedia page, and the Stackexchange discussion, and whatever weird PDFs you find online. Still getting an error message when you try to run the code? Google that error message, in quotes.</p>
-<p>Every person using R, and every person doing statistics, has a million questions as they are doing it - novices and experts alike. Luckily for all of us, many of our fellow R and stats learners post their questions online, and other lovely people attempt to answer them publicly! We read somewhere that a prominent distinction between an experienced programmer and a novice is the longer latency for the novice to look up the help for something confusing (but the direction of causality is not clear!).</p>
-<p>Another wonderful thing about working in R is that there’s actually a lot of help built right into R, and RStudio makes it very easy to see. Almost all R functions (more later on what those are) have help files built in that will provide you with useful information about what those functions do and how to use them. You find this by typing ‘?function’, where I am using “function” as a stand-in for the name you actually want to know about (e.g., ‘?chisq.test’ or ‘?t.test’). It’s important to read these files closely the first time you encounter a function, but it’s also (possibly more) important to refer to them <strong>frequently</strong>. If you have a sense for what you want to do, but don’t know or can’t remember the exact function that will do it, you can use two question marks to search through the help files for a term (e.g. ‘??regression’).</p>
-</div>
 <div id="common-questions-continued-okay-but-where-am-i-where-is-my-dataset" class="section level3">
 <h3>Common questions, continued: Okay but where am I? Where is my dataset?</h3>
 <p>In RStudio, the default view shows you 4 windows:</p>
 <ul>
-<li>By default, the upper left window in RStudio shows you tabs for all of the <strong>R scripts</strong> (extension: .R) or <strong>R Markdown files</strong> (extension: .rmd) that you currently have open. These are the places where you’re storing your step-by-step guide for how to processes, analyze, plot, etc. your dataset.</li>
-<li>The <strong>console</strong> is (by default) in the lower left window of RStudio . This is where you can type in lines of code, run them, and see results printed out. It’s like the screen of a calculator.</li>
-<li>In the upper right window of RStudio (by default), you can see your <strong>environment</strong>, which is where you’ll see any datasets you’ve loaded, as well as any other variables or objects you’ve created (e.g., by assigning some variable to store the results of a statistical test). If you want to examine what these datasets (etc.) look like, you can click on them and they’ll pop up in the upper left window! (You can also do this by using the ‘View()’ function in the console.) This window also has a tab for viewing your <strong>history</strong>, i.e., all the commands you’ve run in the console, in order.</li>
+<li>By default, the upper left window in RStudio shows you tabs for all of the <strong>R scripts</strong> (extension: .R) or <strong>R Markdown files</strong> (extension: .rmd) that you currently have open. These are the places where you’re storing your step-by-step guide for how to processes, analyze, plot, etc. your dataset. You can run lines of code from your script by highlighting them, and pressing COMMAND + ENTER on Mac, or CONTROL + ENTER on PC. If you’re in an R Markdown document and want to run a whole chunk of code, you can press ALT + COMMAND + C on Mac, or ALT + CONTROL + C on PC.</li>
+<li>The <strong>console</strong> is (by default) in the lower left window of RStudio . This is where you can type in lines of code, run them, and see results printed out. It’s like the screen of a calculator. When you run code from your script, it will show up here, along with its results and any warning or error messages.</li>
+<li>In the upper right window of RStudio (by default), you can see your <strong>environment</strong>, which is where you’ll see any datasets you’ve loaded as well as any other variables or objects you’ve created in the console. If you want to examine what these datasets (etc.) look like, you can click on them and they’ll pop up in the upper left window! (You can also do this by using the <code>View()</code> function in the console.) This window also has a tab for viewing your <strong>history</strong>, i.e., all the commands you’ve run in the console, in order.</li>
 <li>In the lower right window of RStudio (by default) are tabs for viewing your <strong>files</strong> (showing you the same organization of files and folders that you’d see in Finder), your <strong>plots</strong> that you create, any <strong>packages</strong> you have loaded or want to load (more on this later), and the <strong>help documentation</strong> for any functions you want to learn more about (more on this later, too!).</li>
 </ul>
-<p>(Note that you can change the layout of these windows if you want!)</p>
+<p>(Note that you can change the layout of these windows if you want.)</p>
 </div>
 </div>
 <div id="getting-down-to-business-basic-interaction-with-the-r-console" class="section level2">
